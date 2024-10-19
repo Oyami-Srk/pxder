@@ -3,6 +3,7 @@ const Illust = require('./illust');
 const Fse = require('fs-extra');
 const Path = require('path');
 const Tools = require('./tools');
+const { logDownloaded } = require('./logDownloaded');
 const { UgoiraDir } = Tools;
 
 const pixivRefer = 'https://www.pixiv.net/';
@@ -234,6 +235,7 @@ function downloadIllusts(illusts, dldir, totalThread) {
               return tryDownload(times + 1);
             });
         })(1);
+        logDownloaded(illust, dldir);
       }
     });
   }

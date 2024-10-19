@@ -12,6 +12,7 @@ const pkg = require('../package.json');
 const { checkProxy } = require('../src/proxy');
 const LoginProtocol = require('../src/protocol');
 const receiveLoginCode = require('../src/protocol/receiver');
+const { setLogFile } = require('../src/logDownloaded');
 
 const program = require('commander');
 const readline = require('readline-sync');
@@ -47,6 +48,7 @@ program
   .option('-M, --no-ugoira-meta', `will not request meta data for ugoira, it helps save time or${optionNewLine}avoid API rate limit error when downloading a tons of ugoiras`)
   .option('')
   .option('-O, --output-dir <dir>', 'Specify download directory')
+  .option('-L, --log-file <file>', 'downloaded log')
   .option('')
   .option('    --debug', 'output all error messages while running')
   .option('    --output-config-dir', 'output the directory of config and exit')
@@ -62,6 +64,10 @@ const config = Pixiv.readConfig();
 
 handleArgv()
   .then(async () => {
+    // 设置下载日志
+    if (program.logFile) {
+      setLogFile(program.logFile);
+    }
     // 检查配置
     if (!Pixiv.checkConfig(config)) {
       console.log('\nRun ' + 'pxder -h'.yellow + ' for more usage information.\n');
